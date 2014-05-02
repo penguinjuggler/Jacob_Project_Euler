@@ -15,7 +15,7 @@ int main(void)
 	int largeProd = 1;
 	int prod;
 	//int *nums = getGrid();
-	int *a;
+	int a[2][4];
 	int i, f, g; 
 	
 	int nums[20][20];
@@ -33,28 +33,27 @@ int main(void)
 		}
 		printf("\n");
 	}
-
 	fclose(fptr);
 	
 	//Verts
 	for(i=0; i<NROWS; i++){
 		for(f=0; f<(NCOLS - LINE); f++){
-			for(g=0; g<4;g++)
+			for(g=0, prod=1; g<4;g++)
 				prod *= nums[i][f+g];
 			if(prod>largeProd){
 				largeProd = prod;
-				for(int assi = 0; assi<4; assi++){
-					a[1][assi] = f+assi;
+				for(int assi=0; assi<4; assi++){
 					a[0][assi] = i;
+					a[1][assi] = f+assi;
 				}
 			}
 		}
 	}
 	
 	//Horz
-	for(i=0; i<NCOLS; i++){
-		for(f=0; f<(NROWS - LINE); f++){
-			for(g=0; g<4;g++)
+	for(i=0; i<(NROWS-LINE); i++){
+		for(f=0; f<NCOLS; f++){
+			for(g=0,prod=1; g<4;g++)
 				prod *= nums[i+g][f];
 			if(prod>largeProd){
 				largeProd = prod;
@@ -62,49 +61,48 @@ int main(void)
 					a[0][assi] = i+assi;
 					a[1][assi] = f;
 				}
-				//a[2][4] = {i,f,i+1,f,i+2,f,i+3,f};
 			}
 		}
 	}
 
 	//Angle Down/Right
 	for(i=0; i<(NROWS-LINE); i++){
-		for(f=0; f<(NROWS - LINE); f++){
-			for(g=0; g<4;g++)
+		for(f=0; f<(NCOLS-LINE); f++){
+			for(g=0, prod=1; g<4;g++)
 				prod *= nums[i+g][f+g];
 			if(prod>largeProd){
 				largeProd = prod;
-				//a[2][4] = {i,f,i+1,f,i+2,f,i+3,f};
 				for(int assi = 0; assi<4; assi++){
-					a[1][assi] = f+assi;
 					a[0][assi] = i+assi;
+					a[1][assi] = f+assi;
 				}
 			}
 		}
 	}
 
 	//Angle Down/Left
-	for(i=LINE-1; i<NROWS; i++){
-		for(f=LINE-1; f<NROWS; f++){
-			for(g=0; g<4;g++)
-				prod *= nums[i-g][f-g];
+	for(i=1; i<(NROWS-LINE); i++){
+		for(f=LINE-1; f<NCOLS; f++){
+			for(g=0, prod=1; g<4;g++)
+				prod *= nums[i+g][f-g];
 			if(prod>largeProd){
 				largeProd = prod;
 				for(int assi = 0; assi<4; assi++){
+					a[0][assi] = i+assi;
 					a[1][assi] = f-assi;
-					a[0][assi] = i-assi;
 				}
-				//a[2][4] = {i,f,i+1,f,i+2,f,i+3,f};
 			}
 		}
 	}
 	
-	printf("At %d, %d the largest product is: %d",a[0][0],a[1][0],largeProd);
+	printf("At %d, %d the largest product is: %d\n\n",a[0][0]+1,a[1][0]+1,largeProd);
 	
 	
-	for(i=0; i<3;i++){
-		for(f=0; f<3; f++)
-			printf("%d",nums[i][f]);
+	for(i=0; i<4;i++){
+		int b1 = a[0][i]+1;
+		int b2 = a[1][i]+1;
+		int b3 = nums[b1-1][b2-1];
+		printf("(%d, %d)  %d",b1,b2,b3);
 		printf("\n");
 	}
 return 0;
